@@ -156,6 +156,7 @@ class CalculatorNotifier extends Notifier<CalculatorState> {
     // Hidden behaviour: `+CODE=` signals the screen to switch apps. The
     // display is wiped so nothing remains on the calculator afterwards.
     final matcher = SecretCodeMatcher(ref.read(secretCodeProvider));
+    print(matcher.matches(expr));
     if (matcher.matches(expr)) {
       state = CalculatorState(unlockSignal: state.unlockSignal + 1);
       return;

@@ -1,3 +1,5 @@
+import 'package:hackathon_app/src/features/calculator/calculator_provider.dart';
+
 import '../../imports/imports.dart';
 
 /// State middleware: logs meaningful Riverpod updates (skips noisy init spam).
@@ -45,6 +47,7 @@ class StateWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
+ 
       observers: [AppProviderObserver()],
       child: child,
     );

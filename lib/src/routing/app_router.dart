@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hackathon_app/src/features/calculator/calculator_screen.dart';
+import 'package:hackathon_app/src/features/calculator/test.dart';
 import 'package:hackathon_app/src/middleware/app_route_observer.dart';
 import 'package:hackathon_app/src/routing/global_navigator.dart';
 import 'package:hackathon_app/src/routing/app_routes.dart';
@@ -43,12 +44,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       name: 'home',
-      builder: (context, state) => const HomePage(),
+      builder: (context, state) => const TestScreen(),
     ),
     GoRoute(
       path: AppRoutes.secretHome,
       name: 'secret home',
-      builder: (context, state) => const CalculatorScreen(),
+      builder: (context, state) =>
+          CalculatorScreen(onsecretCode: () => context.pushReplacement(AppRoutes.home)),
     ),
     if (kDebugMode)
       GoRoute(

@@ -25,10 +25,10 @@ class SessionListenerWrapper extends ConsumerWidget {
           break;
         case SessionAuthenticated():
           FlutterNativeSplash.remove();
-          context.go(AppRoutes.home);
+          appRouter.go(AppRoutes.secretHome);
         case SessionUnauthenticated():
           FlutterNativeSplash.remove();
-          context.go(AppRoutes.onboarding);
+          appRouter.go(AppRoutes.secretHome);
       }
     });
 

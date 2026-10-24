@@ -13,7 +13,7 @@ const double _pagePadding = 16;
 /// called. The calculator wipes its own display first, so nothing on screen
 /// hints that anything happened.
 class CalculatorScreen extends ConsumerWidget {
-  const CalculatorScreen({this.onSecretCode, super.key});
+  const CalculatorScreen( {this.onSecretCode, super.key, required void Function() onsecretCode});
 
   /// Called once each time the secret code is entered. Wire this to the
   /// router, e.g. `context.go(AppRoutes.emergency)`.
