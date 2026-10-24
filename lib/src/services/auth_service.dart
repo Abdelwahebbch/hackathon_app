@@ -1,0 +1,105 @@
+import 'dart:async';
+import '../utils/utils.dart';
+
+class AuthService {
+  AuthService._();
+  static final AuthService instance = AuthService._();
+
+  // In-memory session for mock backend
+  Map<String, dynamic>? _currentUser;
+  final StreamController<Map<String, dynamic>?> _authStateController =
+      StreamController<Map<String, dynamic>?>.broadcast();
+
+  /// Stream of auth state changes. Emits the current user map or null.
+  Stream<Map<String, dynamic>?> get authStateChanges {
+    return logAuthStateChanges(
+      _authStateController.stream,
+      userIdOf: (user) => user['id'] as String? ?? '',
+    );
+  }
+
+  FutureEither<Map<String, dynamic>?> login({
+    required String email,
+    required String password,
+  }) async {
+    return runTask(
+      () async {
+        await Future<void>.delayed(const Duration(seconds: 2));
+
+        // Mock validation
+        if (email.contains('error')) {
+          throw Exception('Mock authentication error');
+        }
+
+        _currentUser = {
+          'id': 'mock-id-123',
+          'email': email,
+          'name': 'Mock User',
+        };
+        _authStateController.add(_currentUser);
+        return _currentUser;
+      },
+      operation: 'auth.login',
+      category: LogCategory.auth,
+      context: {'method': 'email'},
+    );
+  }
+
+  FutureEither<Map<String, dynamic>?> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    return runTask(
+      () async {
+        await Future<void>.delayed(const Duration(seconds: 2));
+        _currentUser = {
+          'id': 'mock-id-${DateTime.now().millisecondsSinceEpoch}',
+          'email': email,
+          'name': name,
+        };
+        _authStateController.add(_currentUser);
+        return _currentUser;
+      },
+      operation: 'auth.signUp',
+      category: LogCategory.auth,
+      context: {'method': 'email'},
+    );
+  }
+
+  FutureEither<void> forgotPassword({required String email}) async {
+    return runTask(
+      () async {
+        await Future<void>.delayed(const Duration(seconds: 1));
+      },
+      operation: 'auth.forgotPassword',
+      category: LogCategory.auth,
+    );
+  }
+
+  FutureEither<void> logout() async {
+    return runTask(
+      () async {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _currentUser = null;
+        _authStateController.add(null);
+      },
+      operation: 'auth.logout',
+      category: LogCategory.auth,
+    );
+  }
+
+  FutureEither<Map<String, dynamic>?> getCurrentUser() async {
+    return runTask(
+      () async {
+        return _currentUser;
+      },
+      operation: 'auth.getCurrentUser',
+      category: LogCategory.auth,
+    );
+  }
+
+  void dispose() {
+    _authStateController.close();
+  }
+}
